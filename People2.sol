@@ -2,7 +2,7 @@ import "./Destroyable.sol";
 
 pragma solidity 0.5.12;
 
-contract People is Destroyable{
+contract People2 is Destroyable{
     
     struct Person {
         string name;
@@ -16,7 +16,7 @@ contract People is Destroyable{
     
     event personDeleted (string name5, uint age5, uint height5, bool alreadyTwentyOne5, address deletedBy5); 
     
-    event workerFired (string name14, uint age14, uint height14, bool alreadyTwentyOne14, uint exSalary14, address exBoss14, address contractOwner14); 
+    event workerFired (uint exSalary14, address exBoss14, address contractOwner14); 
     
     event personUpdated (string beforeUpdatedName7, uint beforeUpdatedAge7, uint beforeUpdatedHeight7, bool beforeUpdatedAlreadyTwentyOne7, string updatedName7, uint updatedAge7, uint updatedHeight7, bool updatedAlreadyTwentyOne7);
     
@@ -110,15 +110,22 @@ contract People is Destroyable{
         return (peopleMapping[creator3].name, peopleMapping[creator3].age, peopleMapping[creator3].height, peopleMapping[creator3].alreadyTwentyOne);
     }
     
-    function deletePerson (address addressToDelete) public onlyOwner {
-        string memory name6 = peopleMapping[addressToDelete].name;
-        uint age6 = peopleMapping[addressToDelete].age;
-        uint height6 = peopleMapping[addressToDelete].height;
-        bool alreadyTwentyOne6 = peopleMapping[addressToDelete].alreadyTwentyOne;
+    
+    function deleteAddress (address addressToDeleteNew) internal {
         
-        delete peopleMapping[addressToDelete];
-        assert( peopleMapping[addressToDelete].age == 0 );
+        string memory name6 = peopleMapping[addressToDeleteNew].name;
+        uint age6 = peopleMapping[addressToDeleteNew].age;
+        uint height6 = peopleMapping[addressToDeleteNew].height;
+        bool alreadyTwentyOne6 = peopleMapping[addressToDeleteNew].alreadyTwentyOne;
+        
+        delete peopleMapping[addressToDeleteNew];
+        assert( peopleMapping[addressToDeleteNew].age == 0 );
         emit personDeleted (name6, age6, height6, alreadyTwentyOne6, owner); 
+        
+    }
+    
+    function deletePerson (address addressToDelete) public onlyOwner {
+        deleteAddress (addressToDelete);
     }
     
     function getAddress (uint index) public view onlyOwner returns(address) {
